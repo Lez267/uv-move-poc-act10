@@ -23,8 +23,11 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers(HttpMethod.POST, "/api/viajes/*/finalizar").authenticated()
-                .anyRequest().authenticated()
+                .requestMatchers("/", "/index.html", "/assets/**", "/favicon.svg", "/icons.svg", "/mapa", "/escaner", "/viaje-activo/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/flota/cercanos").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/usuarios/registrar").permitAll()
+                .requestMatchers("/api/viajes/**").authenticated()
+                .anyRequest().permitAll()
             )
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
