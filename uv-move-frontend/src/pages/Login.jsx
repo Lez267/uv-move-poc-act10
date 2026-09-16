@@ -68,7 +68,9 @@ export default function Login() {
       </div>
       <h1 className="text-2xl font-bold text-uv-azul mb-2">UV Move PoC</h1>
       <p className="text-text-muted text-center text-sm mb-10">
-        {isRegistering ? 'Ingresa tu cuenta institucional de la UV para registrarla en UV Move' : 'Ingresa tu cuenta institucional de la UV para registrarla en UV Move'}
+        {isRegistering 
+          ? 'Ingresa tu cuenta institucional de la UV para registrarla en UV Move' 
+          : 'Bienvenido, ingresa tu correo y contraseña para entrar'}
       </p>
       
       <form onSubmit={handleSubmit} className="w-full flex flex-col gap-6">
