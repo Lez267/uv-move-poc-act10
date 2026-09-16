@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador de QR - UV Move</title>
+  <!-- Tailwind for basic styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- QRCode.js library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body class="bg-slate-100 min-h-screen flex flex-col items-center justify-center p-8">
+  
+  <h1 class="text-3xl font-bold text-blue-800 mb-2">UV Move - Simulador de QR</h1>
+  <p class="text-slate-600 mb-10 text-center max-w-lg">
+    Abre esta página en tu celular y muestra estos códigos a la cámara de tu computadora para probar la aplicación.
+  </p>
+
+  <div class="flex flex-col md:flex-row gap-12">
+    <!-- Escenario 1: Flujo Exitoso -->
+    <div class="bg-white p-8 rounded-3xl shadow-xl flex flex-col items-center w-80">
+      <div class="bg-green-100 text-green-700 px-4 py-1 rounded-full text-sm font-bold mb-6">Escenario 1 (Éxito)</div>
+      
+      <div id="qr-success" class="mb-4"></div>
+      
+      <h2 class="text-xl font-bold text-slate-800">Bicicleta B-001</h2>
+      <p class="text-sm text-slate-500 font-medium mt-1">Estatus: Disponible</p>
+    </div>
+
+    <!-- Escenario 2: Regla de Negocio (Rechazo) -->
+    <div class="bg-white p-8 rounded-3xl shadow-xl flex flex-col items-center w-80">
+      <div class="bg-red-100 text-red-700 px-4 py-1 rounded-full text-sm font-bold mb-6">Escenario 2 (RN7)</div>
+      
+      <div id="qr-error" class="mb-4"></div>
+      
+      <h2 class="text-xl font-bold text-slate-800">Scooter B-002</h2>
+      <p class="text-sm text-slate-500 font-medium mt-1">Estatus: Mantenimiento</p>
+    </div>
+  </div>
+
+  <script>
+    // Generar QRs con el ID de la unidad
+    new QRCode(document.getElementById("qr-success"), {
+      text: "B-001",
+      width: 200,
+      height: 200,
+      colorDark : "#18529D", // Azul UV
+      colorLight : "#ffffff",
+      correctLevel : QRCode.CorrectLevel.H
+    });
+
+    new QRCode(document.getElementById("qr-error"), {
+      text: "B-002",
+      width: 200,
+      height: 200,
+      colorDark : "#FF3B30", // Rojo Apple
+      colorLight : "#ffffff",
+      correctLevel : QRCode.CorrectLevel.H
+    });
+  </script>
+</body>
+</html>
