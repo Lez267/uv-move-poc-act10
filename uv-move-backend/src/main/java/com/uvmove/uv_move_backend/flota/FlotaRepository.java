@@ -8,6 +8,6 @@ import java.util.List;
 @Repository
 public interface FlotaRepository extends JpaRepository<FlotaVehiculos, String> {
     
-    // Método para obtener vehículos disponibles y pintar los pines (Mencionado en ACT9)
+    // metodo para sacar los vehiculos segun su estado (lo ocupamos para los pines del mapa)
     List<FlotaVehiculos> findByEstadoFisico(String estadoFisico);
 }

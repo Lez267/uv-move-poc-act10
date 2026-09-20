@@ -15,18 +15,19 @@ public class UsuarioController {
         public String idUsuario;
     }
 
+    // endpoint para cuando se loguean por primera vez y hay que guardarlos
     @PostMapping("/registrar")
     public ResponseEntity<?> registrarUsuario(@RequestBody RegistroRequest request) {
         if (request.idUsuario == null || request.idUsuario.trim().isEmpty()) {
             return ResponseEntity.badRequest().body("El idUsuario es obligatorio.");
         }
 
-        // Verificar si ya existe
+        // si ya lo tenemos guardado no hacemos nada
         if (usuarioRepository.existsById(request.idUsuario)) {
             return ResponseEntity.ok("El usuario ya existe en Db2.");
         }
 
-        // Crear nuevo usuario activo
+        // guardamos al usuario nuevo y lo ponemos como activo
         Usuario nuevo = new Usuario();
         nuevo.setIdUsuario(request.idUsuario);
         nuevo.setEstatusActivo(true);

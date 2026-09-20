@@ -14,10 +14,12 @@ public class FlotaController {
     @Autowired
     private FlotaService flotaService;
 
+    // endpoint para cuando abren el mapa y quieren ver los vehiculos libres
     @GetMapping("/cercanos")
     public List<FlotaVehiculos> obtenerCercanos() {
         // En un sistema real se filtraría por radio y coordenadas.
         // Aquí retornamos los disponibles como dice la entrega 9.
+        // traemos los vehiculos disponibles directo de la bd
         return flotaService.obtenerVehiculosDisponiblesGPS();
     }
 }

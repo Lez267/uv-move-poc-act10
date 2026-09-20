@@ -11,6 +11,7 @@ export default function Scanner({ session }) {
   const [scannedId, setScannedId] = useState(null)
 
   useEffect(() => {
+    // iniciamos el lector de qr de la camara
     let scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: {width: 200, height: 200} }, false);
     
     scanner.render(async (decodedText) => {
@@ -19,7 +20,7 @@ export default function Scanner({ session }) {
       setLoading(true)
       
       try {
-        // Enviar la petición al backend (Gestor de Viajes)
+        // mandamos la peticion para iniciar el viaje
         const res = await fetch('/api/viajes/iniciar', {
           method: 'POST',
           headers: {
@@ -35,10 +36,12 @@ export default function Scanner({ session }) {
         if (res.ok) {
           const viaje = await res.json()
           scanner.clear()
+          // pasamos a la pantalla del viaje
           navigate(`/viaje-activo/${viaje.idViaje}`, { state: { vehiculo: decodedText } })
         } else if (res.status === 409) {
           const errMsg = await res.text()
           setLoading(false)
+          // mostramos el modal si hay error
           setErrorModal({ show: true, message: errMsg, vehiculo: decodedText })
         } else {
           setLoading(false)
@@ -106,7 +109,7 @@ export default function Scanner({ session }) {
     </div>
   )
 
-  // Función auxiliar para probar sin usar cámara
+  // funcion nomas para probar sin tener que escanear de verdad
   function simulateScan(id) {
     const readerElement = document.getElementById('reader');
     if (readerElement) {

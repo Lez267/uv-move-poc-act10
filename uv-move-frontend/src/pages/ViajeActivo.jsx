@@ -14,6 +14,7 @@ export default function ViajeActivo({ session }) {
   const [startTime] = useState(() => new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}))
 
   useEffect(() => {
+    // un relojito para ver cuanto llevamos
     const interval = setInterval(() => {
       setSeconds(s => s + 1)
     }, 1000)
@@ -30,6 +31,7 @@ export default function ViajeActivo({ session }) {
   const handleFinalizar = async () => {
     setLoading(true)
     try {
+      // avisamos al backend que terminamos de usar la bici o scooter
       const res = await fetch(`/api/viajes/${idViaje}/finalizar`, {
         method: 'POST',
         headers: {

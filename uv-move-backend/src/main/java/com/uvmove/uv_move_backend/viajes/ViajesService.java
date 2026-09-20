@@ -20,12 +20,10 @@ public class ViajesService {
     @Autowired
     private FlotaService flotaService;
 
-    /**
-     * Interfaz: iniciarViaje(idUsuario, idVehiculo)
-     */
+    // iniciamos el viaje validando varias cosas primero
     @Transactional
     public ViajeRegistro iniciarViaje(String idUsuario, String idVehiculo) {
-        // RN1 / RN2: Verificar que el usuario exista, esté activo y no tenga viajes activos
+        // validamos que el usuario exista y no este baneado
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no existe en el sistema."));
 
@@ -33,19 +31,20 @@ public class ViajesService {
             throw new IllegalStateException("El usuario está inactivo o suspendido.");
         }
 
+        // checamos si ya anda en un viaje
         boolean tieneViajeActivo = viajesRepository.existsByIdUsuarioAndEstadoViaje(idUsuario, "Activo");
         if (tieneViajeActivo) {
             throw new IllegalStateException("El usuario ya tiene un viaje activo.");
         }
 
-        // RN7: Verificar disponibilidad del vehículo usando el contrato del módulo de Flota
+        // verificamos que el vehiculo este libre
         String estadoVehiculo = flotaService.obtenerEstado(idVehiculo);
         if (!"Disponible".equals(estadoVehiculo)) {
-            // Rechazo por Regla de Negocio
+            // si esta ocupado o descompuesto, no lo dejamos rentar
             throw new IllegalStateException("El vehículo no está disponible para renta. Estado actual: " + estadoVehiculo);
         }
 
-        // R10: Registrar viaje con hora exacta
+        // creamos el registro del viaje con la hora actual
         ViajeRegistro nuevoViaje = new ViajeRegistro();
         nuevoViaje.setIdUsuario(idUsuario);
         nuevoViaje.setIdVehiculo(idVehiculo);
@@ -54,12 +53,13 @@ public class ViajesService {
         
         ViajeRegistro guardado = viajesRepository.save(nuevoViaje);
 
-        // Actualizar el estado del vehículo usando el contrato del módulo de Flota
+        // marcamos el vehiculo como ocupado
         flotaService.actualizarEstado(idVehiculo, "En uso");
 
         return guardado;
     }
 
+    // funcion para terminar el viaje y liberar la bici/scooter
     @Transactional
     public ViajeRegistro finalizarViaje(Integer idViaje) {
         ViajeRegistro viaje = viajesRepository.findById(idViaje)
@@ -72,7 +72,7 @@ public class ViajesService {
         viaje.setHoraFin(LocalDateTime.now());
         viaje.setEstadoViaje("Finalizado");
         
-        // Actualizar vehículo a Disponible (o En revisión, dependiendo del requerimiento, pero Disponible es lo estándar)
+        // regresamos el vehiculo a disponible para que otro lo use
         flotaService.actualizarEstado(viaje.getIdVehiculo(), "Disponible");
 
         return viajesRepository.save(viaje);

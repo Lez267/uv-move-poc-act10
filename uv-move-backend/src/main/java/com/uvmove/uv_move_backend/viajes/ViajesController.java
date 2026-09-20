@@ -17,22 +17,24 @@ public class ViajesController {
         public String idVehiculo;
     }
 
+    // endpoint para cuando escanean el qr e inician el viaje
     @PostMapping("/iniciar")
     public ResponseEntity<?> iniciarViaje(@RequestBody ViajeRequest request) {
         try {
             ViajeRegistro viaje = viajesService.iniciarViaje(request.idUsuario, request.idVehiculo);
             return ResponseEntity.ok(viaje);
         } catch (IllegalStateException e) {
-            // Rechazo por regla de negocio (RN1, RN2, RN7) -> 409 Conflict
+            // regla de negocio: si no se puede iniciar tiramos error (ej. ya tiene viaje o no sirve el vehiculo)
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         } catch (IllegalArgumentException e) {
-            // Error de validación de IDs -> 400 Bad Request
+            // si mandan datos malos
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
+    // endpoint para cuando terminan el viaje
     @PostMapping("/{idViaje}/finalizar")
     public ResponseEntity<?> finalizarViaje(@PathVariable Integer idViaje) {
         try {

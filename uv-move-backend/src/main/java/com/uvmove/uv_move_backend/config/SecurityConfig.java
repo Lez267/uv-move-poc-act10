@@ -13,6 +13,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 
+// configuracion de seguridad y permisos de rutas
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -23,9 +24,11 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authz -> authz
+                // rutas libres para que cargue el front y se pueda registrar
                 .requestMatchers("/", "/index.html", "/assets/**", "/favicon.svg", "/icons.svg", "/mapa", "/escaner", "/viaje-activo/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/flota/cercanos").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/usuarios/registrar").permitAll()
+                // aqui si pedimos token para las demas cosas de viajes
                 .requestMatchers("/api/viajes/**").authenticated()
                 .anyRequest().permitAll()
             )
@@ -35,6 +38,7 @@ public class SecurityConfig {
         return http.build();
     }
 
+    // configuracion del cors para que no de error en el navegador al conectarse desde el front
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

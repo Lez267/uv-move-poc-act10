@@ -5,6 +5,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Column;
 
+// mapeo de la tabla de vehiculos en la base de datos
 @Entity
 @Table(name = "FLOTA_VEHICULOS")
 public class FlotaVehiculos {

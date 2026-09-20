@@ -8,7 +8,7 @@ export default function Mapa({ session }) {
   const [vehiculos, setVehiculos] = useState([])
 
   useEffect(() => {
-    // API Call al Backend de Spring Boot (Gestor de Flota)
+    // pedimos los vehiculos libres al backend de spring
     fetch('/api/flota/cercanos', {
       headers: {
         'Authorization': `Bearer ${session.access_token}`
@@ -37,6 +37,7 @@ export default function Mapa({ session }) {
           </h2>
           <p className="text-[10px] text-text-muted font-medium">Campus Ixtac</p>
         </div>
+        {/* boton para cerrar sesion */}
         <button onClick={() => supabase.auth.signOut()} className="w-9 h-9 rounded-full bg-neuro-base shadow-neuro font-bold text-uv-azul text-xs border border-white">
           S
         </button>
@@ -65,7 +66,7 @@ export default function Mapa({ session }) {
         </div>
       )})}
       
-      {/* Botón inferior para Escanear */}
+      {/* mandamos a la camara para leer el qr */}
       <div className="absolute bottom-6 left-4 right-4 bg-neuro-base rounded-[32px] p-5 shadow-neuro border border-white/80 z-10">
         <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto mb-4"></div>
         <div className="flex justify-between items-center mb-5">

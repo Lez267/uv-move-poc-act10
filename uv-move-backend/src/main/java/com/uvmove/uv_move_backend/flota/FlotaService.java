@@ -16,6 +16,7 @@ public class FlotaService {
      * Interfaz: obtenerEstado(idVehiculo)
      * Contrato: Devuelve el estado actual o lanza excepción si no existe.
      */
+     // checamos el estado actual del vehiculo, tira error si no lo encuentra
     public String obtenerEstado(String idVehiculo) {
         return flotaRepository.findById(idVehiculo)
                 .map(FlotaVehiculos::getEstadoFisico)
@@ -25,6 +26,7 @@ public class FlotaService {
     /**
      * Interfaz: actualizarEstado(idVehiculo, nuevoEstado)
      */
+    // actualizamos el estado del vehiculo (ej. de disponible a en uso)
     @Transactional
     public void actualizarEstado(String idVehiculo, String nuevoEstado) {
         FlotaVehiculos vehiculo = flotaRepository.findById(idVehiculo)
@@ -36,6 +38,7 @@ public class FlotaService {
     /**
      * Servicio de lectura para el frontend (Mapa)
      */
+    // sacamos todos los vehiculos que estan disponibles para mostrarlos en el mapa
     public List<FlotaVehiculos> obtenerVehiculosDisponiblesGPS() {
         return flotaRepository.findByEstadoFisico("Disponible");
     }

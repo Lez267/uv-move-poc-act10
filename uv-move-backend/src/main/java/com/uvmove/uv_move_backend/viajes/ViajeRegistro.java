@@ -3,6 +3,7 @@ package com.uvmove.uv_move_backend.viajes;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+// mapeo de la tabla de viajes
 @Entity
 @Table(name = "VIAJES_REGISTRO")
 public class ViajeRegistro {

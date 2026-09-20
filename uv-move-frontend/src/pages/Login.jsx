@@ -14,7 +14,7 @@ export default function Login() {
     setMessage({ text: '', type: '' })
     
     if (isRegistering) {
-      // 1. Validar formato estricto UV: zS + 2 digitos + 00 + 4 digitos @estudiantes.uv.mx
+      // checamos que el correo sea de la uv
       const uvRegex = /^[zZ][sS]\d{2}00\d{4}@estudiantes\.uv\.mx$/
       if (!uvRegex.test(email)) {
         setMessage({ text: 'Formato inválido. Debe ser zSXXXX00XXXX@estudiantes.uv.mx (Ej. zS24003976@estudiantes.uv.mx)', type: 'error' })
@@ -22,7 +22,7 @@ export default function Login() {
         return
       }
 
-      // 2. Registrar en Supabase
+      // creamos la cuenta en supabase
       const { data, error } = await supabase.auth.signUp({ email, password })
       
       if (error) {
@@ -31,7 +31,7 @@ export default function Login() {
         return
       }
 
-      // 3. Registrar en base de datos Db2
+      // guardamos el id del usuario en la base de datos principal
       try {
         const res = await fetch('/api/usuarios/registrar', {
           method: 'POST',
@@ -51,7 +51,7 @@ export default function Login() {
       setLoading(false)
 
     } else {
-      // Inicio de sesión normal
+      // inicio de sesion normalito
       const { error } = await supabase.auth.signInWithPassword({ email, password })
       
       if (error) {

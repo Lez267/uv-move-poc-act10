@@ -10,6 +10,7 @@ function App() {
   const [session, setSession] = useState(null)
   
   useEffect(() => {
+    // revisamos si ya iniciaron sesion antes para pasarlos directo
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)
     })
@@ -26,6 +27,7 @@ function App() {
   return (
     <div className="bg-[#E8EEF5] min-h-[100dvh] w-full flex flex-col relative overflow-hidden">
       <BrowserRouter>
+        {/* si no hay sesion se quedan en login, si no, al mapa o escaner */}
         <Routes>
           <Route path="/" element={!session ? <Login /> : <Navigate to="/mapa" />} />
           <Route path="/mapa" element={session ? <Mapa session={session} /> : <Navigate to="/" />} />
