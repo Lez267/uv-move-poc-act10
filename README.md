@@ -64,3 +64,13 @@ CREATE TABLE VIAJES_REGISTRO (
 
 -- (Datos de prueba omitidos aquí por brevedad, consultar database/init_db2.sql)
 ```
+
+---
+
+## Conclusión y Hallazgos (Pregunta Final)
+
+**¿La implementación confirmó el diseño que propusimos o reveló una inconsistencia que fue necesario corregir?**
+
+La implementación **confirmó el diseño** planteado en la fase de modelado. Al llevar la arquitectura a código, comprobamos que el Gestor de Viajes puede operar sin acceder directamente a la tabla de vehículos, utilizando estrictamente el contrato de `FlotaService` (métodos `obtenerEstado` y `actualizarEstado`). 
+
+**Principal hallazgo:** Separar las responsabilidades en dos módulos distintos fue clave. Al principio, a nivel de código, parecía más "fácil" hacer un solo query SQL en Viajes que revisara el estado del vehículo directamente. Sin embargo, al respetar el diseño y forzar la comunicación a través de la interfaz de Flota, logramos aislar la Regla de Negocio 7 (Disponibilidad), comprobando que los módulos colaboran sin romper el encapsulamiento.
